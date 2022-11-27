@@ -1,0 +1,20 @@
+package com.sd.lib.vdialog.animator.slide
+
+import android.view.View
+
+/**
+ * Slide relative to the view itself.
+ *
+ * show: slide up
+ *
+ * hide: slide down
+ */
+class SlideUpDownRItselfFactory : SlideVerticalFactory() {
+    override fun getValueHidden(view: View): Float {
+        return view.height.toFloat()
+    }
+
+    override fun getValueShown(view: View): Float {
+        return 0f
+    }
+}
