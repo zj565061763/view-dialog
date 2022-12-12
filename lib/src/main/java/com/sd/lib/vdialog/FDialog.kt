@@ -742,6 +742,7 @@ open class FDialog(context: Context) : IDialog {
 
     private inner class DialogActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
         fun register(register: Boolean) {
+            if (_context !is Activity) return
             val application = _context.applicationContext as Application
             application.unregisterActivityLifecycleCallbacks(this)
             if (register) {
