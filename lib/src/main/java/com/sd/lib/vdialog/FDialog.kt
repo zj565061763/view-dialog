@@ -880,6 +880,6 @@ private object FDialogHolder {
 
 internal inline fun logMsg(isDebug: Boolean, block: () -> String) {
     if (isDebug) {
-        Log.i("FDialog", block())
+        Log.i("view-dialog", block())
     }
 }
