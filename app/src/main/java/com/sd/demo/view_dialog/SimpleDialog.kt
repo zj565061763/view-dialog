@@ -1,10 +1,10 @@
 package com.sd.demo.view_dialog
 
-import android.app.Activity
+import android.content.Context
 import android.view.View
 import com.sd.lib.vdialog.FDialog
 
-class SimpleDialog(activity: Activity) : FDialog(activity) {
+class SimpleDialog(context: Context) : FDialog(context) {
 
     override fun onCreate() {
         super.onCreate()
