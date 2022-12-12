@@ -9,7 +9,7 @@ import com.sd.lib.vdialog.animator.AnimatorFactory
 
 interface IDialog {
     /**
-     * Whether to enable debug mode.(Log tag：IDialog)
+     * Whether to enable debug mode.(Log tag：FDialog)
      */
     var isDebug: Boolean
 
