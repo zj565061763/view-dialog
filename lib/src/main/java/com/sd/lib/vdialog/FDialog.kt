@@ -255,6 +255,7 @@ open class FDialog(context: Context) : IDialog {
     }
 
     private fun setDefaultConfig() {
+        logMsg(isDebug) { "set default config ${this@FDialog}" }
         if (animatorFactory == null) {
             when (gravity) {
                 Gravity.CENTER -> {
@@ -286,6 +287,13 @@ open class FDialog(context: Context) : IDialog {
                     _isAnimatorFactoryModifiedInternal = true
                 }
             }
+        }
+    }
+
+    private fun resetConfig() {
+        logMsg(isDebug) { "reset config ${this@FDialog}" }
+        if (_isAnimatorFactoryModifiedInternal) {
+            animatorFactory = null
         }
     }
 
@@ -456,19 +464,25 @@ open class FDialog(context: Context) : IDialog {
             return
         }
 
-        _isStarted = true
-        logMsg(isDebug) { "notify onStart ${this@FDialog}" }
-        onStart()
+        notifyStart()
         if (_state.isDismissPart) {
             logMsg(isDebug) { "showDialog canceled state changed to $_state when notify onStart $uuid ${this@FDialog}" }
             return
         }
 
         setDefaultConfig()
+        val display = display
         display.addView(_dialogView)
 
-        if (setState(State.Show)) {
-            notifyShow()
+        if (_dialogView.parent != null) {
+            if (setState(State.Show)) {
+                notifyShow()
+            }
+        } else {
+            logMsg(isDebug) { "showDialog canceled $display addView failed $uuid ${this@FDialog}" }
+            setState(State.Dismiss)
+            notifyStop()
+            resetConfig()
         }
 
         logMsg(isDebug) { "showDialog end $uuid ${this@FDialog}" }
@@ -492,17 +506,10 @@ open class FDialog(context: Context) : IDialog {
             }
         }
 
-        if (_isStarted) {
-            _isStarted = false
-            logMsg(isDebug) { "notify onStop ${this@FDialog}" }
-            onStop()
-        }
+        notifyStop()
 
         if (_state == State.Dismiss) {
-            logMsg(isDebug) { "reset config ${this@FDialog}" }
-            if (_isAnimatorFactoryModifiedInternal) {
-                animatorFactory = null
-            }
+            resetConfig()
         }
 
         logMsg(isDebug) { "dismissDialog end $uuid ${this@FDialog}" }
@@ -513,6 +520,20 @@ open class FDialog(context: Context) : IDialog {
             _isCreated = true
             logMsg(isDebug) { "notify onCreate ${this@FDialog}" }
             onCreate()
+        }
+    }
+
+    private fun notifyStart() {
+        _isStarted = true
+        logMsg(isDebug) { "notify onStart ${this@FDialog}" }
+        onStart()
+    }
+
+    private fun notifyStop() {
+        if (_isStarted) {
+            _isStarted = false
+            logMsg(isDebug) { "notify onStop ${this@FDialog}" }
+            onStop()
         }
     }
 
