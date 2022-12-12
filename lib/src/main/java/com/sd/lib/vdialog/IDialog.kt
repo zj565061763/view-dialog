@@ -1,6 +1,5 @@
 package com.sd.lib.vdialog
 
-import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.KeyEvent
@@ -17,11 +16,6 @@ interface IDialog {
      * [Context]
      */
     val context: Context
-
-    /**
-     * [Activity]
-     */
-    val ownerActivity: Activity
 
     /**
      * [Display]

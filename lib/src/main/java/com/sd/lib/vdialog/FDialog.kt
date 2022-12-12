@@ -7,6 +7,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -26,9 +27,9 @@ import com.sd.lib.vdialog.utils.FVisibilityAnimatorHandler
 import java.util.*
 import kotlin.properties.Delegates
 
-open class FDialog(activity: Activity) : IDialog {
-    private val _activity = activity
-    private val _dialogView = InternalDialogView(activity)
+open class FDialog(context: Context) : IDialog {
+    private val _context = findContext(context)
+    private val _dialogView = InternalDialogView(context)
 
     private var _contentView: View? = null
     private val backgroundView get() = _dialogView.backgroundView
@@ -57,16 +58,14 @@ open class FDialog(activity: Activity) : IDialog {
 
     override var isDebug: Boolean = false
 
-    override val context: Context get() = _activity
-
-    override val ownerActivity: Activity get() = _activity
+    override val context: Context get() = _context
 
     override val contentView: View? get() = _contentView
 
     override var display: IDialog.Display = ActivityDisplay()
 
     override fun setContentView(resId: Int) {
-        val view = LayoutInflater.from(context).inflate(resId, containerView, false)
+        val view = LayoutInflater.from(_context).inflate(resId, containerView, false)
         setContentView(view)
     }
 
@@ -131,7 +130,7 @@ open class FDialog(activity: Activity) : IDialog {
 
     final override var isBackgroundDim: Boolean by Delegates.observable(false) { _, _, newValue ->
         if (newValue) {
-            val color = context.resources.getColor(R.color.lib_view_dialog_background_dim)
+            val color = _context.resources.getColor(R.color.lib_view_dialog_background_dim)
             backgroundView.setBackgroundColor(color)
         } else {
             backgroundView.setBackgroundColor(0)
@@ -176,7 +175,7 @@ open class FDialog(activity: Activity) : IDialog {
     }
 
     private val _showRunnable = Runnable {
-        if (ownerActivity.isFinishing) return@Runnable
+        if (_context.isFinishing()) return@Runnable
         if (_state.isShowPart) return@Runnable
         logMsg(isDebug) { "+++++ try show state:$_state ${this@FDialog}" }
 
@@ -190,7 +189,7 @@ open class FDialog(activity: Activity) : IDialog {
     }
 
     private val _dismissRunnable = Runnable {
-        val isFinishing = ownerActivity.isFinishing
+        val isFinishing = _context.isFinishing()
         logMsg(isDebug) { "----- try dismiss state:$_state isFinishing:${isFinishing} ${this@FDialog}" }
 
         if (isFinishing) {
@@ -560,7 +559,7 @@ open class FDialog(activity: Activity) : IDialog {
         private val _checkFocusRunnable = object : Runnable {
             override fun run() {
                 if (!this@InternalDialogView.isAttachedToWindow) return
-                if (isShowing && FDialogHolder.getLast(_activity) == this@FDialog) {
+                if (isShowing && FDialogHolder.getLast(_context) == this@FDialog) {
                     if (!hasFocus()) {
                         logMsg(isDebug) { "requestFocus ${this@FDialog}" }
                         requestChildFocus(containerView, containerView)
@@ -743,7 +742,7 @@ open class FDialog(activity: Activity) : IDialog {
 
     private inner class DialogActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
         fun register(register: Boolean) {
-            val application = context.applicationContext as Application
+            val application = _context.applicationContext as Application
             application.unregisterActivityLifecycleCallbacks(this)
             if (register) {
                 application.registerActivityLifecycleCallbacks(this)
@@ -758,7 +757,7 @@ open class FDialog(activity: Activity) : IDialog {
         override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
         override fun onActivityDestroyed(activity: Activity) {
-            if (activity === _activity) {
+            if (activity === _context) {
                 logMsg(isDebug) { "onActivityDestroyed ${this@FDialog}" }
                 FDialogHolder.remove(activity)
                 dismiss()
@@ -770,29 +769,29 @@ open class FDialog(activity: Activity) : IDialog {
         gravity = Gravity.CENTER
         isBackgroundDim = true
 
-        val defaultPadding = (activity.resources.displayMetrics.widthPixels * 0.1f).toInt()
+        val defaultPadding = (context.resources.displayMetrics.widthPixels * 0.1f).toInt()
         padding.set(defaultPadding, 0, defaultPadding, 0)
     }
 
     companion object {
         /**
-         * Get all dialog of [activity].
+         * Get all dialog of [context].
          */
         @JvmStatic
-        fun getAll(activity: Activity?): List<FDialog>? {
-            if (activity == null) return null
-            return FDialogHolder.get(activity)
+        fun getAll(context: Context?): List<FDialog>? {
+            if (context == null) return null
+            return FDialogHolder.get(context)
         }
 
         /**
-         * Close all dialog of [activity].
+         * Close all dialog of [context].
          */
         @JvmStatic
-        fun dismissAll(activity: Activity?) {
-            if (activity == null) return
-            if (activity.isFinishing) return
+        fun dismissAll(context: Context?) {
+            if (context == null) return
+            if (context.isFinishing()) return
 
-            val list = getAll(activity) ?: return
+            val list = getAll(context) ?: return
             for (item in list) {
                 item.dismiss()
             }
@@ -838,12 +837,12 @@ private fun getAnimatorDuration(animator: Animator): Long {
 }
 
 private object FDialogHolder {
-    private val dialogHolder: MutableMap<Activity, MutableList<FDialog>> = hashMapOf()
+    private val dialogHolder: MutableMap<Context, MutableList<FDialog>> = hashMapOf()
 
     fun addDialog(dialog: FDialog) {
-        val activity = dialog.ownerActivity
-        val holder = dialogHolder[activity] ?: mutableListOf<FDialog>().also {
-            dialogHolder[activity] = it
+        val context = dialog.context
+        val holder = dialogHolder[context] ?: mutableListOf<FDialog>().also {
+            dialogHolder[context] = it
         }
 
         if (!holder.contains(dialog)) {
@@ -853,29 +852,46 @@ private object FDialogHolder {
     }
 
     fun removeDialog(dialog: FDialog) {
-        val activity = dialog.ownerActivity
-        val holder = dialogHolder[activity] ?: return
+        val context = dialog.context
+        val holder = dialogHolder[context] ?: return
 
         val remove = holder.remove(dialog)
         if (remove) {
             holder.lastOrNull()?.notifyCoverRemove()
             if (holder.isEmpty()) {
-                dialogHolder.remove(activity)
+                dialogHolder.remove(context)
             }
         }
     }
 
-    fun get(activity: Activity): List<FDialog>? {
-        return dialogHolder[activity]?.toList()
+    fun get(context: Context): List<FDialog>? {
+        return dialogHolder[context]?.toList()
     }
 
-    fun getLast(activity: Activity): FDialog? {
-        return dialogHolder[activity]?.lastOrNull()
+    fun getLast(context: Context): FDialog? {
+        return dialogHolder[context]?.lastOrNull()
     }
 
-    fun remove(activity: Activity) {
-        dialogHolder.remove(activity)
+    fun remove(context: Context) {
+        dialogHolder.remove(context)
     }
+}
+
+private fun findContext(input: Context): Context {
+    var context: Context? = input
+    while (true) {
+        if (context == null) break
+        if (context is Activity) break
+        if (context is Application) break
+        if (context is ContextWrapper) {
+            context = context.baseContext
+        }
+    }
+    return context ?: input
+}
+
+private fun Context.isFinishing(): Boolean {
+    return if (this is Activity) this.isFinishing else false
 }
 
 internal inline fun logMsg(isDebug: Boolean, block: () -> String) {
