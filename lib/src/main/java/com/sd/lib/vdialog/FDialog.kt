@@ -62,13 +62,13 @@ open class FDialog(context: Context) : IDialog {
 
     private val _mainHandler by lazy { Handler(Looper.getMainLooper()) }
 
-    override var isDebug: Boolean = false
+    final override var isDebug: Boolean = false
 
-    override val context: Context get() = _context
+    final override val context: Context get() = _context
 
-    override val contentView: View? get() = _contentView
+    final override val contentView: View? get() = _contentView
 
-    override var display: IDialog.Display = ActivityDisplay()
+    final override var display: IDialog.Display = ActivityDisplay()
 
     override fun setContentView(resId: Int) {
         val view = LayoutInflater.from(_context).inflate(resId, containerView, false)
