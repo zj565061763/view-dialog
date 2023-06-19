@@ -711,19 +711,19 @@ open class FDialog(context: Context) : IDialog {
 
         override fun onViewAdded(child: View) {
             super.onViewAdded(child)
+            logMsg(isDebug) { "onContentViewAdded:${child} ${this@FDialog}" }
             if (child !== _contentView) {
                 error("Can not add view to container.")
             }
-            logMsg(isDebug) { "onContentViewAdded:${child} ${this@FDialog}" }
         }
 
         override fun onViewRemoved(child: View) {
             super.onViewRemoved(child)
+            logMsg(isDebug) { "onContentViewRemoved:${child} ${this@FDialog}" }
             if (child === _contentView) {
                 // The content view is directly removed from the outside.
                 dismiss()
             }
-            logMsg(isDebug) { "onContentViewRemoved:${child} ${this@FDialog}" }
         }
 
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
