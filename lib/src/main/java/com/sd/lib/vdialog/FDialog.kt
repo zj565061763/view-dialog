@@ -521,7 +521,7 @@ open class FDialog(context: Context) : IDialog {
         val isAttached = _dialogView.parent != null
         if (isAttached) {
             showDisplay.removeView(_dialogView)
-            check(_dialogView.parent == null) { "You should remove dialog view in IDisplay.removeView()" }
+            check(_dialogView.parent == null) { "You should remove dialog view in IDialog.Display.removeView()" }
         }
 
         if (setState(State.Dismiss)) {
