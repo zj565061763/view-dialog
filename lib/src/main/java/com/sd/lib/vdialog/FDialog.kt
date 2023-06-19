@@ -68,6 +68,8 @@ open class FDialog(context: Context) : IDialog {
 
     final override var display: IDialog.Display = ActivityDisplay()
 
+    final override var animatorDuration: Long = 0
+
     final override val isShowing: Boolean get() = _state == State.Show
 
     final override val contentView: View? get() = _contentView
@@ -125,8 +127,6 @@ open class FDialog(context: Context) : IDialog {
     override fun setOnCancelListener(listener: IDialog.OnCancelListener?) {
         _onCancelListener = listener
     }
-
-    override var animatorDuration: Long = 0
 
     final override var animatorFactory: AnimatorFactory? by Delegates.observable(null) { _, _, _ ->
         _isAnimatorFactoryModifiedInternal = false
