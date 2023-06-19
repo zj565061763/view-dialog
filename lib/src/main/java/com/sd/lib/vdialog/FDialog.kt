@@ -49,6 +49,14 @@ open class FDialog(context: Context) : IDialog {
     private var _isStarted = false
     private var _isCanceled = false
 
+    private var _showDisplay: IDialog.Display? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                logMsg(isDebug) { "_showDisplay $value ${this@FDialog}" }
+            }
+        }
+
     private var _isAnimatorFactoryModifiedInternal = false
     private var _showAnimatorFlag by Delegates.observable(false) { _, oldValue, newValue ->
         if (oldValue != newValue) {
@@ -472,7 +480,7 @@ open class FDialog(context: Context) : IDialog {
 
         setDefaultConfig()
 
-        val display = display
+        val display = display.also { _showDisplay = it }
         display.addView(_dialogView)
         if (_state.isDismissPart) {
             logMsg(isDebug) { "showDialog canceled state changed to $_state when display addView $uuid ${this@FDialog}" }
@@ -503,9 +511,10 @@ open class FDialog(context: Context) : IDialog {
         _activityLifecycleCallbacks.unregister()
         FDialogHolder.removeDialog(this@FDialog)
 
+        val showDisplay = checkNotNull(_showDisplay)
         val isAttached = _dialogView.parent != null
         if (isAttached) {
-            display.removeView(_dialogView)
+            showDisplay.removeView(_dialogView)
             check(_dialogView.parent == null) { "You should remove dialog view in IDisplay.removeView()" }
         }
 
