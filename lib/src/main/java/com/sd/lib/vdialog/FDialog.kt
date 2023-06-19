@@ -458,6 +458,7 @@ open class FDialog(context: Context) : IDialog {
     }
 
     private fun showDialog() {
+        checkMainThread()
         check(_state == State.TryShow) { "Illegal state $_state" }
 
         val uuid = if (isDebug) UUID.randomUUID().toString() else ""
@@ -934,6 +935,12 @@ private fun findContext(input: Context): Context {
 
 private fun Context.isFinishing(): Boolean {
     return if (this is Activity) this.isFinishing else false
+}
+
+private fun checkMainThread() {
+    check(Looper.getMainLooper() === Looper.myLooper()) {
+        "Expected main thread but was " + Thread.currentThread().name
+    }
 }
 
 internal inline fun logMsg(isDebug: Boolean, block: () -> String) {
