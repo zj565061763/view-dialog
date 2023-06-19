@@ -728,6 +728,10 @@ open class FDialog(context: Context) : IDialog {
 
         override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
             super.onLayout(changed, l, t, r, b)
+            layoutParams?.let {
+                check(it.width == ViewGroup.LayoutParams.MATCH_PARENT)
+                check(it.height == ViewGroup.LayoutParams.MATCH_PARENT)
+            }
             startShowAnimator()
         }
 
