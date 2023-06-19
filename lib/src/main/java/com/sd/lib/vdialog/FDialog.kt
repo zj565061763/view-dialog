@@ -496,6 +496,7 @@ open class FDialog(context: Context) : IDialog {
     }
 
     private fun dismissDialog(isAnimator: Boolean = false) {
+        checkMainThread()
         val uuid = if (isDebug) UUID.randomUUID().toString() else ""
         logMsg(isDebug) { "dismissDialog start state:$_state isAnimator:${isAnimator} $uuid ${this@FDialog}" }
 
