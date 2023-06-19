@@ -451,6 +451,7 @@ open class FDialog(context: Context) : IDialog {
             return
         }
 
+        _isStarted = true
         logMsg(isDebug) { "notify onStart ${this@FDialog}" }
         onStart()
         if (_state.isDismissPart) {
@@ -516,7 +517,11 @@ open class FDialog(context: Context) : IDialog {
             }
         }
 
-        notifyStop()
+        if (_isStarted) {
+            _isStarted = false
+            logMsg(isDebug) { "notify onStop ${this@FDialog}" }
+            onStop()
+        }
 
         if (_state == State.Dismiss) {
             resetConfig()
@@ -530,14 +535,6 @@ open class FDialog(context: Context) : IDialog {
             _isCreated = true
             logMsg(isDebug) { "notify onCreate ${this@FDialog}" }
             onCreate()
-        }
-    }
-
-    private fun notifyStop() {
-        if (_isStarted) {
-            _isStarted = false
-            logMsg(isDebug) { "notify onStop ${this@FDialog}" }
-            onStop()
         }
     }
 
