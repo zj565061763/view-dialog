@@ -503,13 +503,14 @@ open class FDialog(context: Context) : IDialog {
         _activityLifecycleCallbacks.unregister()
         FDialogHolder.removeDialog(this@FDialog)
 
-        val isAttachedToWindow = _dialogView.isAttachedToWindow
-        if (isAttachedToWindow) {
+        val isAttached = _dialogView.parent != null
+        if (isAttached) {
             display.removeView(_dialogView)
+            check(_dialogView.parent == null) { "You should remove dialog view in IDisplay.removeView()" }
         }
 
         if (setState(State.Dismiss)) {
-            if (isAttachedToWindow) {
+            if (isAttached) {
                 notifyDismiss()
             }
         }
