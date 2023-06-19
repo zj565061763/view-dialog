@@ -236,21 +236,6 @@ open class FDialog(context: Context) : IDialog {
         return true
     }
 
-    private fun notifyDismiss() {
-        if (_state != State.Dismiss) return
-        logMsg(isDebug) { "notifyDismiss ${this@FDialog}" }
-
-        if (_isCanceled) {
-            _isCanceled = false
-            _mainHandler.post {
-                _onCancelListener?.onCancel(this@FDialog)
-            }
-        }
-        _mainHandler.post {
-            _onDismissListener?.onDismiss(this@FDialog)
-        }
-    }
-
     private fun setDefaultConfig() {
         logMsg(isDebug) { "set default config ${this@FDialog}" }
         if (animatorFactory == null) {
@@ -488,9 +473,7 @@ open class FDialog(context: Context) : IDialog {
         }
         if (_dialogView.parent == null) {
             logMsg(isDebug) { "showDialog canceled $display addView failed $uuid ${this@FDialog}" }
-            setState(State.Dismiss)
-            notifyStop()
-            resetConfig()
+            dismissDialog()
             return
         }
 
@@ -519,7 +502,16 @@ open class FDialog(context: Context) : IDialog {
 
         if (setState(State.Dismiss)) {
             if (isAttached) {
-                notifyDismiss()
+                logMsg(isDebug) { "notifyDismiss ${this@FDialog}" }
+                if (_isCanceled) {
+                    _isCanceled = false
+                    _mainHandler.post {
+                        _onCancelListener?.onCancel(this@FDialog)
+                    }
+                }
+                _mainHandler.post {
+                    _onDismissListener?.onDismiss(this@FDialog)
+                }
             }
         }
 
