@@ -489,9 +489,8 @@ open class FDialog(context: Context) : IDialog {
         }
 
         if (_dialogView.parent != null) {
-            if (setState(State.Show)) {
-                notifyShow()
-            }
+            setState(State.Show)
+            notifyShow()
         } else {
             logMsg(isDebug) { "showDialog canceled $display addView failed $uuid ${this@FDialog}" }
             setState(State.Dismiss)
