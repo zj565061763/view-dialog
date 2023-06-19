@@ -451,7 +451,8 @@ open class FDialog(context: Context) : IDialog {
             return
         }
 
-        notifyStart()
+        logMsg(isDebug) { "notify onStart ${this@FDialog}" }
+        onStart()
         if (_state.isDismissPart) {
             logMsg(isDebug) { "showDialog canceled state changed to $_state when notify onStart $uuid ${this@FDialog}" }
             return
@@ -530,12 +531,6 @@ open class FDialog(context: Context) : IDialog {
             logMsg(isDebug) { "notify onCreate ${this@FDialog}" }
             onCreate()
         }
-    }
-
-    private fun notifyStart() {
-        _isStarted = true
-        logMsg(isDebug) { "notify onStart ${this@FDialog}" }
-        onStart()
     }
 
     private fun notifyStop() {
