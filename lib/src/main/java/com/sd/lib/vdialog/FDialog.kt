@@ -790,6 +790,7 @@ open class FDialog(context: Context) : IDialog {
         override fun onActivityDestroyed(activity: Activity) {
             if (activity === _context) {
                 logMsg(isDebug) { "onActivityDestroyed ${this@FDialog}" }
+                activity.application.unregisterActivityLifecycleCallbacks(this)
                 FDialogHolder.remove(activity)
                 dismiss()
             }
