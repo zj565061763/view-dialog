@@ -74,6 +74,19 @@ open class FDialog(context: Context) : IDialog {
         _isAnimatorFactoryModifiedInternal = false
     }
 
+    final override var gravity: Int by Delegates.observable(Gravity.NO_GRAVITY) { _, _, newValue ->
+        containerView.gravity = newValue
+    }
+
+    final override var isBackgroundDim: Boolean by Delegates.observable(false) { _, _, newValue ->
+        if (newValue) {
+            val color = _context.resources.getColor(R.color.lib_view_dialog_background_dim)
+            backgroundView.setBackgroundColor(color)
+        } else {
+            backgroundView.setBackgroundColor(0)
+        }
+    }
+
     final override val isShowing: Boolean get() = _state == State.Show
 
     final override val contentView: View? get() = _contentView
@@ -140,19 +153,6 @@ open class FDialog(context: Context) : IDialog {
 
     override fun setOnCancelListener(listener: IDialog.OnCancelListener?) {
         _onCancelListener = listener
-    }
-
-    final override var gravity: Int by Delegates.observable(Gravity.NO_GRAVITY) { _, _, newValue ->
-        containerView.gravity = newValue
-    }
-
-    final override var isBackgroundDim: Boolean by Delegates.observable(false) { _, _, newValue ->
-        if (newValue) {
-            val color = _context.resources.getColor(R.color.lib_view_dialog_background_dim)
-            backgroundView.setBackgroundColor(color)
-        } else {
-            backgroundView.setBackgroundColor(0)
-        }
     }
 
     override fun show() {
