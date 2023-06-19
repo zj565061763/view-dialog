@@ -487,17 +487,16 @@ open class FDialog(context: Context) : IDialog {
             logMsg(isDebug) { "showDialog canceled state changed to $_state when display addView $uuid ${this@FDialog}" }
             return
         }
-
-        if (_dialogView.parent != null) {
-            setState(State.Show)
-            notifyShow()
-        } else {
+        if (_dialogView.parent == null) {
             logMsg(isDebug) { "showDialog canceled $display addView failed $uuid ${this@FDialog}" }
             setState(State.Dismiss)
             notifyStop()
             resetConfig()
+            return
         }
 
+        setState(State.Show)
+        notifyShow()
         logMsg(isDebug) { "showDialog end $uuid ${this@FDialog}" }
     }
 
