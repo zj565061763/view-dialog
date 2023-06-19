@@ -30,6 +30,7 @@ import com.sd.lib.vdialog.animator.slide.SlideUpDownRParentFactory
 import com.sd.lib.vdialog.display.ActivityDisplay
 import com.sd.lib.vdialog.utils.FVisibilityAnimatorHandler
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.properties.Delegates
 
 open class FDialog(context: Context) : IDialog {
@@ -464,7 +465,7 @@ open class FDialog(context: Context) : IDialog {
         val uuid = if (isDebug) UUID.randomUUID().toString() else ""
         logMsg(isDebug) { "showDialog start $uuid ${this@FDialog}" }
 
-        _activityLifecycleCallbacks.register(true)
+        _activityLifecycleCallbacks.register()
         FDialogHolder.addDialog(this@FDialog)
 
         notifyCreate()
@@ -501,7 +502,7 @@ open class FDialog(context: Context) : IDialog {
         val uuid = if (isDebug) UUID.randomUUID().toString() else ""
         logMsg(isDebug) { "dismissDialog start state:$_state isAnimator:${isAnimator} $uuid ${this@FDialog}" }
 
-        _activityLifecycleCallbacks.register(false)
+        _activityLifecycleCallbacks.unregister()
         FDialogHolder.removeDialog(this@FDialog)
 
         val isAttachedToWindow = _dialogView.isAttachedToWindow
@@ -771,12 +772,19 @@ open class FDialog(context: Context) : IDialog {
     }
 
     private inner class DialogActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
-        fun register(register: Boolean) {
+        private val _hasRegister = AtomicBoolean()
+
+        fun register() {
             if (_context !is Activity) return
-            val application = _context.applicationContext as Application
-            application.unregisterActivityLifecycleCallbacks(this)
-            if (register) {
-                application.registerActivityLifecycleCallbacks(this)
+            if (_hasRegister.compareAndSet(false, true)) {
+                _context.application.registerActivityLifecycleCallbacks(this)
+            }
+        }
+
+        fun unregister() {
+            if (_context !is Activity) return
+            if (_hasRegister.compareAndSet(true, false)) {
+                _context.application.unregisterActivityLifecycleCallbacks(this)
             }
         }
 
@@ -790,7 +798,7 @@ open class FDialog(context: Context) : IDialog {
         override fun onActivityDestroyed(activity: Activity) {
             if (activity === _context) {
                 logMsg(isDebug) { "onActivityDestroyed ${this@FDialog}" }
-                activity.application.unregisterActivityLifecycleCallbacks(this)
+                unregister()
                 FDialogHolder.remove(activity)
                 dismiss()
             }
