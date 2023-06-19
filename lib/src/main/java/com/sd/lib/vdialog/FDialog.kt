@@ -480,8 +480,8 @@ open class FDialog(context: Context) : IDialog {
         }
 
         setState(State.Show)
-        logMsg(isDebug) { "notifyShow ${this@FDialog}" }
         _mainHandler.post {
+            logMsg(isDebug) { "notify onShow ${this@FDialog}" }
             _onShowListener?.onShow(this@FDialog)
         }
 
@@ -504,14 +504,15 @@ open class FDialog(context: Context) : IDialog {
 
         if (setState(State.Dismiss)) {
             if (isAttached) {
-                logMsg(isDebug) { "notifyDismiss ${this@FDialog}" }
                 if (_isCanceled) {
                     _isCanceled = false
                     _mainHandler.post {
+                        logMsg(isDebug) { "notify onCancel ${this@FDialog}" }
                         _onCancelListener?.onCancel(this@FDialog)
                     }
                 }
                 _mainHandler.post {
+                    logMsg(isDebug) { "notify onDismiss ${this@FDialog}" }
                     _onDismissListener?.onDismiss(this@FDialog)
                 }
             }
