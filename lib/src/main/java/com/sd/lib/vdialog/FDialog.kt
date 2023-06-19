@@ -66,9 +66,11 @@ open class FDialog(context: Context) : IDialog {
 
     final override val context: Context get() = _context
 
-    final override val contentView: View? get() = _contentView
-
     final override var display: IDialog.Display = ActivityDisplay()
+
+    final override val isShowing: Boolean get() = _state == State.Show
+
+    final override val contentView: View? get() = _contentView
 
     override fun setContentView(resId: Int) {
         val view = LayoutInflater.from(_context).inflate(resId, containerView, false)
@@ -154,8 +156,6 @@ open class FDialog(context: Context) : IDialog {
             }
         }
     }
-
-    override val isShowing: Boolean get() = _state == State.Show
 
     override fun show() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
