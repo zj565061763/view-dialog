@@ -70,6 +70,20 @@ open class FDialog(context: Context) : IDialog {
 
     final override var animatorDuration: Long = 0
 
+    final override var animatorFactory: AnimatorFactory? by Delegates.observable(null) { _, _, _ ->
+        _isAnimatorFactoryModifiedInternal = false
+    }
+
+    final override val padding: IDialog.Padding = object : IDialog.Padding {
+        override val left: Int get() = containerView.paddingLeft
+        override val top: Int get() = containerView.paddingTop
+        override val right: Int get() = containerView.paddingRight
+        override val bottom: Int get() = containerView.paddingBottom
+        override fun set(left: Int, top: Int, right: Int, bottom: Int) {
+            containerView.setPadding(left, top, right, bottom)
+        }
+    }
+
     final override val isShowing: Boolean get() = _state == State.Show
 
     final override val contentView: View? get() = _contentView
@@ -128,10 +142,6 @@ open class FDialog(context: Context) : IDialog {
         _onCancelListener = listener
     }
 
-    final override var animatorFactory: AnimatorFactory? by Delegates.observable(null) { _, _, _ ->
-        _isAnimatorFactoryModifiedInternal = false
-    }
-
     final override var gravity: Int by Delegates.observable(Gravity.NO_GRAVITY) { _, _, newValue ->
         containerView.gravity = newValue
     }
@@ -142,18 +152,6 @@ open class FDialog(context: Context) : IDialog {
             backgroundView.setBackgroundColor(color)
         } else {
             backgroundView.setBackgroundColor(0)
-        }
-    }
-
-    final override val padding: IDialog.Padding by lazy {
-        object : IDialog.Padding {
-            override val left: Int get() = containerView.paddingLeft
-            override val top: Int get() = containerView.paddingTop
-            override val right: Int get() = containerView.paddingRight
-            override val bottom: Int get() = containerView.paddingBottom
-            override fun set(left: Int, top: Int, right: Int, bottom: Int) {
-                containerView.setPadding(left, top, right, bottom)
-            }
         }
     }
 
