@@ -46,11 +46,6 @@ interface IDialog {
     var isBackgroundDim: Boolean
 
     /**
-     * [Padding]
-     */
-    val padding: Padding
-
-    /**
      * Whether the dialog is currently showing.
      */
     val isShowing: Boolean
@@ -59,6 +54,11 @@ interface IDialog {
      * The dialog content view.
      */
     val contentView: View?
+
+    /**
+     * [Padding]
+     */
+    val padding: Padding
 
     /**
      * Set the dialog content from a layout resource.

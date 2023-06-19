@@ -74,6 +74,10 @@ open class FDialog(context: Context) : IDialog {
         _isAnimatorFactoryModifiedInternal = false
     }
 
+    final override val isShowing: Boolean get() = _state == State.Show
+
+    final override val contentView: View? get() = _contentView
+
     final override val padding: IDialog.Padding = object : IDialog.Padding {
         override val left: Int get() = containerView.paddingLeft
         override val top: Int get() = containerView.paddingTop
@@ -83,10 +87,6 @@ open class FDialog(context: Context) : IDialog {
             containerView.setPadding(left, top, right, bottom)
         }
     }
-
-    final override val isShowing: Boolean get() = _state == State.Show
-
-    final override val contentView: View? get() = _contentView
 
     override fun setContentView(resId: Int) {
         val view = LayoutInflater.from(_context).inflate(resId, containerView, false)
