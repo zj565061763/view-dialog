@@ -30,7 +30,6 @@ import com.sd.lib.vdialog.animator.slide.SlideUpDownRParentFactory
 import com.sd.lib.vdialog.display.ActivityDisplay
 import com.sd.lib.vdialog.utils.FVisibilityAnimatorHandler
 import java.util.UUID
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.properties.Delegates
 
 open class FDialog(context: Context) : IDialog {
@@ -768,18 +767,20 @@ open class FDialog(context: Context) : IDialog {
     }
 
     private inner class DialogActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
-        private val _hasRegister = AtomicBoolean()
+        private var _hasRegister = false
 
         fun register() {
             if (_context !is Activity) return
-            if (_hasRegister.compareAndSet(false, true)) {
+            if (!_hasRegister) {
+                _hasRegister = true
                 _context.application.registerActivityLifecycleCallbacks(this)
             }
         }
 
         fun unregister() {
             if (_context !is Activity) return
-            if (_hasRegister.compareAndSet(true, false)) {
+            if (_hasRegister) {
+                _hasRegister = false
                 _context.application.unregisterActivityLifecycleCallbacks(this)
             }
         }
