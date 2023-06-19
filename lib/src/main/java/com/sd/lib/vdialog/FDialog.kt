@@ -721,7 +721,7 @@ open class FDialog(context: Context) : IDialog {
             super.onViewRemoved(child)
             logMsg(isDebug) { "onContentViewRemoved:${child} ${this@FDialog}" }
             if (child === _contentView) {
-                // The content view is directly removed from the outside.
+                logMsg(isDebug) { "The content view is directly removed from the outside. ${this@FDialog}" }
                 dismiss()
             }
         }
