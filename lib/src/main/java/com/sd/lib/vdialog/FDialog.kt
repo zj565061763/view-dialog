@@ -234,15 +234,6 @@ open class FDialog(context: Context) : IDialog {
         return true
     }
 
-    private fun notifyShow() {
-        if (_state != State.Show) return
-        logMsg(isDebug) { "notifyShow ${this@FDialog}" }
-
-        _mainHandler.post {
-            _onShowListener?.onShow(this@FDialog)
-        }
-    }
-
     private fun notifyDismiss() {
         if (_state != State.Dismiss) return
         logMsg(isDebug) { "notifyDismiss ${this@FDialog}" }
@@ -496,7 +487,11 @@ open class FDialog(context: Context) : IDialog {
         }
 
         setState(State.Show)
-        notifyShow()
+        logMsg(isDebug) { "notifyShow ${this@FDialog}" }
+        _mainHandler.post {
+            _onShowListener?.onShow(this@FDialog)
+        }
+
         logMsg(isDebug) { "showDialog end $uuid ${this@FDialog}" }
     }
 
