@@ -480,8 +480,13 @@ open class FDialog(context: Context) : IDialog {
         }
 
         setDefaultConfig()
+
         val display = display
         display.addView(_dialogView)
+        if (_state.isDismissPart) {
+            logMsg(isDebug) { "showDialog canceled state changed to $_state when display addView $uuid ${this@FDialog}" }
+            return
+        }
 
         if (_dialogView.parent != null) {
             if (setState(State.Show)) {
