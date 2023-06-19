@@ -12,7 +12,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.sd.lib.vdialog.animator.AnimatorFactory
@@ -24,7 +29,7 @@ import com.sd.lib.vdialog.animator.slide.SlideRightLeftRParentFactory
 import com.sd.lib.vdialog.animator.slide.SlideUpDownRParentFactory
 import com.sd.lib.vdialog.display.ActivityDisplay
 import com.sd.lib.vdialog.utils.FVisibilityAnimatorHandler
-import java.util.*
+import java.util.UUID
 import kotlin.properties.Delegates
 
 open class FDialog(context: Context) : IDialog {
@@ -262,24 +267,28 @@ open class FDialog(context: Context) : IDialog {
                     animatorFactory = AlphaFactory()
                     _isAnimatorFactoryModifiedInternal = true
                 }
+
                 Gravity.LEFT,
                 Gravity.LEFT or Gravity.CENTER,
                 -> {
                     animatorFactory = SlideRightLeftRParentFactory()
                     _isAnimatorFactoryModifiedInternal = true
                 }
+
                 Gravity.TOP,
                 Gravity.TOP or Gravity.CENTER,
                 -> {
                     animatorFactory = SlideDownUpRParentFactory()
                     _isAnimatorFactoryModifiedInternal = true
                 }
+
                 Gravity.RIGHT,
                 Gravity.RIGHT or Gravity.CENTER,
                 -> {
                     animatorFactory = SlideLeftRightRParentFactory()
                     _isAnimatorFactoryModifiedInternal = true
                 }
+
                 Gravity.BOTTOM,
                 Gravity.BOTTOM or Gravity.CENTER,
                 -> {
