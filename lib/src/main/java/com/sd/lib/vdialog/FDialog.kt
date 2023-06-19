@@ -566,16 +566,16 @@ open class FDialog(context: Context) : IDialog {
 
         fun notifyCover() {
             if (!_isCover) {
-                logMsg(isDebug) { "notifyCover ${this@FDialog}" }
                 _isCover = true
+                logMsg(isDebug) { "notifyCover ${this@FDialog}" }
                 checkFocus(false)
             }
         }
 
         fun notifyCoverRemove() {
             if (_isCover) {
-                logMsg(isDebug) { "notifyCoverRemove ${this@FDialog}" }
                 _isCover = false
+                logMsg(isDebug) { "notifyCoverRemove ${this@FDialog}" }
                 checkFocus(true)
             }
         }
