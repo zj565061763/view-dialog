@@ -101,12 +101,12 @@ open class FDialog(context: Context) : IDialog {
         }
     }
 
-    override fun setContentView(resId: Int) {
+    final override fun setContentView(resId: Int) {
         val view = LayoutInflater.from(_context).inflate(resId, containerView, false)
         setContentView(view)
     }
 
-    override fun setContentView(view: View?) {
+    final override fun setContentView(view: View?) {
         val old = _contentView
         if (old === view) return
 
@@ -128,7 +128,7 @@ open class FDialog(context: Context) : IDialog {
         onContentViewChanged(old, view)
     }
 
-    override fun <T : View> findViewById(id: Int): T? {
+    final override fun <T : View> findViewById(id: Int): T? {
         return _contentView?.findViewById(id)
     }
 
