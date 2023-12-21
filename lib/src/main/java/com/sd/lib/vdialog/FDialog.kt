@@ -358,7 +358,7 @@ open class FDialog(context: Context) : IDialog {
 
         logMsg(isDebug) {
             val textIsShow = if (show) "show" else "dismiss"
-            val textIsNull = if (animator == null) "null" else "not null"
+            val textIsNull = if (animator == null) "Null" else "NoneNull"
             "animator $textIsShow create $textIsNull ${this@FDialog}"
         }
         return animator
