@@ -881,11 +881,10 @@ private object FDialogHolder {
     fun addDialog(dialog: FDialog) {
         val context = dialog.context
         val holder = dialogHolder.getOrPut(context) { mutableListOf() }
+        if (holder.contains(dialog)) return
 
-        if (!holder.contains(dialog)) {
-            holder.lastOrNull()?.notifyCover()
-            holder.add(dialog)
-        }
+        holder.lastOrNull()?.notifyCover()
+        holder.add(dialog)
     }
 
     fun removeDialog(dialog: FDialog) {
