@@ -37,8 +37,8 @@ open class FDialog(context: Context) : IDialog {
     private val _context = findContext(context)
 
     private val _dialogView = InternalDialogView(context)
-    private val backgroundView get() = _dialogView.backgroundView
-    private val containerView get() = _dialogView.containerView
+    private val _backgroundView get() = _dialogView.backgroundView
+    private val _containerView get() = _dialogView.containerView
 
     private var _contentView: View? = null
 
@@ -78,15 +78,15 @@ open class FDialog(context: Context) : IDialog {
     }
 
     final override var gravity: Int by Delegates.observable(Gravity.NO_GRAVITY) { _, _, newValue ->
-        containerView.gravity = newValue
+        _containerView.gravity = newValue
     }
 
     final override var isBackgroundDim: Boolean by Delegates.observable(false) { _, _, newValue ->
         if (newValue) {
             val color = _context.resources.getColor(R.color.lib_view_dialog_background_dim)
-            backgroundView.setBackgroundColor(color)
+            _backgroundView.setBackgroundColor(color)
         } else {
-            backgroundView.setBackgroundColor(0)
+            _backgroundView.setBackgroundColor(0)
         }
     }
 
@@ -95,17 +95,17 @@ open class FDialog(context: Context) : IDialog {
     final override val contentView: View? get() = _contentView
 
     final override val padding: IDialog.Padding = object : IDialog.Padding {
-        override val left: Int get() = containerView.paddingLeft
-        override val top: Int get() = containerView.paddingTop
-        override val right: Int get() = containerView.paddingRight
-        override val bottom: Int get() = containerView.paddingBottom
+        override val left: Int get() = _containerView.paddingLeft
+        override val top: Int get() = _containerView.paddingTop
+        override val right: Int get() = _containerView.paddingRight
+        override val bottom: Int get() = _containerView.paddingBottom
         override fun set(left: Int, top: Int, right: Int, bottom: Int) {
-            containerView.setPadding(left, top, right, bottom)
+            _containerView.setPadding(left, top, right, bottom)
         }
     }
 
     final override fun setContentView(resId: Int) {
-        val view = LayoutInflater.from(_context).inflate(resId, containerView, false)
+        val view = LayoutInflater.from(_context).inflate(resId, _containerView, false)
         setContentView(view)
     }
 
@@ -116,7 +116,7 @@ open class FDialog(context: Context) : IDialog {
         _contentView = view
 
         if (old != null) {
-            containerView.removeView(old)
+            _containerView.removeView(old)
         }
 
         if (view != null) {
@@ -125,7 +125,7 @@ open class FDialog(context: Context) : IDialog {
                 p.width = it.width
                 p.height = it.height
             }
-            containerView.addView(view, p)
+            _containerView.addView(view, p)
         }
 
         onContentViewChanged(old, view)
@@ -329,7 +329,7 @@ open class FDialog(context: Context) : IDialog {
         }
 
         val animatorBackground = if (isBackgroundDim) {
-            _backgroundViewAnimatorFactory.createAnimator(show, backgroundView)
+            _backgroundViewAnimatorFactory.createAnimator(show, _backgroundView)
         } else {
             null
         }
@@ -745,8 +745,8 @@ open class FDialog(context: Context) : IDialog {
 
         private fun startShowAnimator() {
             if (_showAnimatorFlag) {
-                val width = containerView.width
-                val height = containerView.height
+                val width = _containerView.width
+                val height = _containerView.height
                 if (width > 0 && height > 0) {
                     logMsg(isDebug) { "startShowAnimator width:${width} height:${height} ${this@FDialog}" }
                     _showAnimatorFlag = false
