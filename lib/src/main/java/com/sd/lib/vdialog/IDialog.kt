@@ -84,7 +84,7 @@ interface IDialog {
     /**
      * Sets whether the dialog is canceled when touched outside the content's bounds.
      * If setting to true, the dialog is set to be cancelable if not already set.
-     * The default value is true.
+     * The default value is false.
      */
     fun setCanceledOnTouchOutside(cancel: Boolean)
 

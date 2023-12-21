@@ -44,7 +44,7 @@ open class FDialog(context: Context) : IDialog {
 
     private var _state = State.Dismiss
     private var _cancelable = true
-    private var _canceledOnTouchOutside = true
+    private var _canceledOnTouchOutside = false
 
     private var _isCreated = false
     private var _isStarted = false
