@@ -3,6 +3,7 @@ package com.sd.lib.vdialog
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
@@ -633,6 +634,7 @@ open class FDialog(context: Context) : IDialog {
             }
         }
 
+        @SuppressLint("ClickableViewAccessibility")
         override fun onTouchEvent(event: MotionEvent): Boolean {
             if (_state.isDismissPart) {
                 return true
