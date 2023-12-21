@@ -504,12 +504,7 @@ open class FDialog(context: Context) : IDialog {
             }
         }
 
-        if (_isStarted) {
-            _isStarted = false
-            logMsg(isDebug) { "notify onStop ${this@FDialog}" }
-            onStop()
-        }
-
+        notifyStop()
         if (_state == State.Dismiss) {
             resetConfig()
         }
@@ -529,6 +524,14 @@ open class FDialog(context: Context) : IDialog {
         _isStarted = true
         logMsg(isDebug) { "notify onStart ${this@FDialog}" }
         onStart()
+    }
+
+    private fun notifyStop() {
+        if (_isStarted) {
+            _isStarted = false
+            logMsg(isDebug) { "notify onStop ${this@FDialog}" }
+            onStop()
+        }
     }
 
     private inner class InternalDialogView(context: Context) : FrameLayout(context) {
