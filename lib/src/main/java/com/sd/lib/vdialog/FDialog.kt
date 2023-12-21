@@ -765,9 +765,7 @@ open class FDialog(context: Context) : IDialog {
         _dialogView.notifyCoverRemove()
     }
 
-    private val _activityLifecycleCallbacks by lazy {
-        DialogActivityLifecycleCallbacks()
-    }
+    private val _activityLifecycleCallbacks = DialogActivityLifecycleCallbacks()
 
     private inner class DialogActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
         private var _hasRegister = false
