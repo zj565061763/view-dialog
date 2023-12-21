@@ -364,34 +364,32 @@ open class FDialog(context: Context) : IDialog {
         return animator
     }
 
-    private val _backgroundViewAnimatorFactory: AnimatorFactory by lazy {
-        object : ObjectAnimatorFactory() {
-            override fun getPropertyName(): String {
-                return View.ALPHA.name
-            }
+    private val _backgroundViewAnimatorFactory = object : ObjectAnimatorFactory() {
+        override fun getPropertyName(): String {
+            return View.ALPHA.name
+        }
 
-            override fun getValueHidden(view: View): Float {
-                return 0.0f
-            }
+        override fun getValueHidden(view: View): Float {
+            return 0.0f
+        }
 
-            override fun getValueShown(view: View): Float {
-                return 1.0f
-            }
+        override fun getValueShown(view: View): Float {
+            return 1.0f
+        }
 
-            override fun getValueCurrent(view: View): Float {
-                return view.alpha
-            }
+        override fun getValueCurrent(view: View): Float {
+            return view.alpha
+        }
 
-            override fun onAnimationStart(show: Boolean, view: View) {
-                super.onAnimationStart(show, view)
-                view.visibility = View.VISIBLE
-            }
+        override fun onAnimationStart(show: Boolean, view: View) {
+            super.onAnimationStart(show, view)
+            view.visibility = View.VISIBLE
+        }
 
-            override fun onAnimationEnd(show: Boolean, view: View) {
-                super.onAnimationEnd(show, view)
-                if (!show) {
-                    view.visibility = View.INVISIBLE
-                }
+        override fun onAnimationEnd(show: Boolean, view: View) {
+            super.onAnimationEnd(show, view)
+            if (!show) {
+                view.visibility = View.INVISIBLE
             }
         }
     }
