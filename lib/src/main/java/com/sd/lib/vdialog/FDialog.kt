@@ -582,7 +582,7 @@ open class FDialog(context: Context) : IDialog {
         private val _checkFocusRunnable = object : Runnable {
             override fun run() {
                 if (!this@InternalDialogView.isAttachedToWindow) return
-                if (isShowing && FDialogHolder.getLast(_context) == this@FDialog) {
+                if (isShowing && FDialogHolder.getLast(_context) === this@FDialog) {
                     if (!hasFocus()) {
                         logMsg(isDebug) { "requestFocus ${this@FDialog}" }
                         requestChildFocus(containerView, containerView)
