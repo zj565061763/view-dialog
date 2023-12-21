@@ -36,5 +36,7 @@ class SimpleDialog(context: Context) : FDialog(context) {
 
         // Set the padding.
         padding.set(0, 0, 0, 0)
+
+        setCanceledOnTouchOutside(true)
     }
 }
