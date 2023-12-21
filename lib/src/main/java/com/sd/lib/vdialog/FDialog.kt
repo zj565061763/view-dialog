@@ -461,17 +461,12 @@ open class FDialog(context: Context) : IDialog {
         _dialogView.removeSelf()
         val display = display
         display.addView(_dialogView)
-
         if (_state.isDismissPart) {
             logMsg(isDebug) { "showDialog canceled state changed to $_state when display addView $uuid ${this@FDialog}" }
             return
         }
-        if (_dialogView.parent == null) {
-            logMsg(isDebug) { "showDialog canceled $display addView failed $uuid ${this@FDialog}" }
-            dismissDialog()
-            return
-        }
 
+        checkNotNull(_dialogView.parent) { "You should add dialog view in IDialog.Display.addView()" }
         setState(State.Show)
         _mainHandler.post {
             logMsg(isDebug) { "notify onShow $uuid ${this@FDialog}" }
