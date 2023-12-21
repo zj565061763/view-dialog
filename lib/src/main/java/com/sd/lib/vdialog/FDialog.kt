@@ -458,11 +458,7 @@ open class FDialog(context: Context) : IDialog {
 
         setDefaultConfig()
 
-        _dialogView.parent?.let { parent ->
-            if (parent is ViewGroup) {
-                parent.removeView(_dialogView)
-            }
-        }
+        _dialogView.removeSelf()
         val display = display
         display.addView(_dialogView)
 
@@ -929,6 +925,11 @@ private fun checkMainThread() {
     check(Looper.getMainLooper() === Looper.myLooper()) {
         "Expected main thread but was " + Thread.currentThread().name
     }
+}
+
+private fun View.removeSelf() {
+    val p = this.parent ?: return
+    if (p is ViewGroup) p.removeView(this)
 }
 
 internal inline fun logMsg(isDebug: Boolean, block: () -> String) {
