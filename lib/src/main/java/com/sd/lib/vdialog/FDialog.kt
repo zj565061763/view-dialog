@@ -284,43 +284,41 @@ open class FDialog(context: Context) : IDialog {
         }
     }
 
-    private val _animatorHandler by lazy {
-        FVisibilityAnimatorHandler().apply {
-            this.setShowAnimatorListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator) {
-                    super.onAnimationStart(animation)
-                    logMsg(isDebug) { "animator show onAnimationStart ${this@FDialog}" }
-                }
+    private val _animatorHandler = FVisibilityAnimatorHandler().apply {
+        this.setShowAnimatorListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                super.onAnimationStart(animation)
+                logMsg(isDebug) { "animator show onAnimationStart ${this@FDialog}" }
+            }
 
-                override fun onAnimationCancel(animation: Animator) {
-                    super.onAnimationCancel(animation)
-                    logMsg(isDebug) { "animator show onAnimationCancel ${this@FDialog}" }
-                }
+            override fun onAnimationCancel(animation: Animator) {
+                super.onAnimationCancel(animation)
+                logMsg(isDebug) { "animator show onAnimationCancel ${this@FDialog}" }
+            }
 
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    logMsg(isDebug) { "animator show onAnimationEnd ${this@FDialog}" }
-                }
-            })
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                logMsg(isDebug) { "animator show onAnimationEnd ${this@FDialog}" }
+            }
+        })
 
-            this.setHideAnimatorListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator) {
-                    super.onAnimationStart(animation)
-                    logMsg(isDebug) { "animator dismiss onAnimationStart ${this@FDialog}" }
-                }
+        this.setHideAnimatorListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator) {
+                super.onAnimationStart(animation)
+                logMsg(isDebug) { "animator dismiss onAnimationStart ${this@FDialog}" }
+            }
 
-                override fun onAnimationCancel(animation: Animator) {
-                    super.onAnimationCancel(animation)
-                    logMsg(isDebug) { "animator dismiss onAnimationCancel ${this@FDialog}" }
-                }
+            override fun onAnimationCancel(animation: Animator) {
+                super.onAnimationCancel(animation)
+                logMsg(isDebug) { "animator dismiss onAnimationCancel ${this@FDialog}" }
+            }
 
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    logMsg(isDebug) { "animator dismiss onAnimationEnd ${this@FDialog}" }
-                    dismissDialog(true)
-                }
-            })
-        }
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
+                logMsg(isDebug) { "animator dismiss onAnimationEnd ${this@FDialog}" }
+                dismissDialog(true)
+            }
+        })
     }
 
     private fun createAnimator(show: Boolean): Animator? {
