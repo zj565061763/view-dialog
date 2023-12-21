@@ -120,12 +120,12 @@ open class FDialog(context: Context) : IDialog {
         }
 
         if (view != null) {
-            val p = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             view.layoutParams?.let {
-                p.width = it.width
-                p.height = it.height
+                params.width = it.width
+                params.height = it.height
             }
-            _containerView.addView(view, p)
+            _containerView.addView(view, params)
         }
 
         onContentViewChanged(old, view)
