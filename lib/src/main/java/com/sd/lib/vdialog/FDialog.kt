@@ -478,7 +478,7 @@ open class FDialog(context: Context) : IDialog {
 
         setState(State.Show)
         _mainHandler.post {
-            logMsg(isDebug) { "notify onShow ${this@FDialog}" }
+            logMsg(isDebug) { "notify onShow $uuid ${this@FDialog}" }
             _onShowListener?.onShow(this@FDialog)
         }
 
