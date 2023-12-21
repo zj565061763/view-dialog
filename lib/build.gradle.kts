@@ -6,7 +6,7 @@ plugins {
 
 val libGroupId = "com.sd.lib.android"
 val libArtifactId = "view-dialog"
-val libVersionName = "1.0.0-rc01"
+val libVersionName = "1.0.0-rc02"
 
 android {
     namespace = "com.sd.lib.vdialog"
