@@ -493,12 +493,12 @@ open class FDialog(context: Context) : IDialog {
                 if (_isCanceled) {
                     _isCanceled = false
                     _mainHandler.post {
-                        logMsg(isDebug) { "notify onCancel ${this@FDialog}" }
+                        logMsg(isDebug) { "notify onCancel $uuid ${this@FDialog}" }
                         _onCancelListener?.onCancel(this@FDialog)
                     }
                 }
                 _mainHandler.post {
-                    logMsg(isDebug) { "notify onDismiss ${this@FDialog}" }
+                    logMsg(isDebug) { "notify onDismiss $uuid ${this@FDialog}" }
                     _onDismissListener?.onDismiss(this@FDialog)
                 }
             }
