@@ -689,10 +689,10 @@ open class FDialog(context: Context) : IDialog {
 
     private inner class InternalContainerView(context: Context) : LinearLayout(context) {
         override fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
-            val finalLeft = if (left < 0) paddingLeft else left
-            val finalTop = if (top < 0) paddingTop else top
-            val finalRight = if (right < 0) paddingRight else right
-            val finalBottom = if (bottom < 0) paddingBottom else bottom
+            val finalLeft = left.takeIf { it >= 0 } ?: paddingLeft
+            val finalTop = top.takeIf { it >= 0 } ?: paddingTop
+            val finalRight = right.takeIf { it >= 0 } ?: paddingRight
+            val finalBottom = bottom.takeIf { it >= 0 } ?: paddingBottom
 
             if (finalLeft != paddingLeft
                 || finalTop != paddingTop
