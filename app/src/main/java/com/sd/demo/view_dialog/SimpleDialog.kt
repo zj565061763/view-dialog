@@ -31,7 +31,7 @@ class SimpleDialog(context: Context) : FDialog(context) {
     }
 
     init {
-        // Enable debug mode.(Log tag：IDialog)
+        // Enable debug mode.(Log tag：view-dialog)
         isDebug = true
 
         // Set the padding.
