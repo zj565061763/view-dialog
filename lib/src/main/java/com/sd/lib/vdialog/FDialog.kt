@@ -35,11 +35,12 @@ import kotlin.properties.Delegates
 
 open class FDialog(context: Context) : IDialog {
     private val _context = findContext(context)
-    private val _dialogView = InternalDialogView(context)
 
-    private var _contentView: View? = null
+    private val _dialogView = InternalDialogView(context)
     private val backgroundView get() = _dialogView.backgroundView
     private val containerView get() = _dialogView.containerView
+
+    private var _contentView: View? = null
 
     private var _state = State.Dismiss
     private var _cancelable = true
